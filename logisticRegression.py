@@ -2,6 +2,7 @@
 import math
 import pandas as pd
 import numpy as np
+import formulas
 
 irisDataFile = open("iris_data/iris.data")
 datalines = irisDataFile.readlines()
