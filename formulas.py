@@ -42,3 +42,11 @@ def confusionMatrix(predictedData, actualData):
                 #True Negative
                 tn+=1
     return tp, fp, tn, fn
+
+#Accuracy Function
+def accuracy(tp, fp, tn, fn):
+    return (tp + tn) / (tp + tn + fp + fn)
+
+#Precision Function
+def precision(tp, fp):
+    return tp / (tp + fp)
