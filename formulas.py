@@ -26,7 +26,7 @@ def confusionMatrix(predictedData, actualData):
     fp = 0
     tn = 0
     fn = 0
-    for i in range(predictedData):
+    for i in range(len(predictedData)):
         if (predictedData[i] == 1):
             if (actualData[i] == 1):
                 #True Positive
