@@ -3,6 +3,7 @@ import math
 import pandas as pd
 import numpy as np
 import formulas
+import scipy
 
 irisDataFile = open("iris_data/iris.data")
 datalines = irisDataFile.readlines()
@@ -30,3 +31,15 @@ if not ("Iris-setosa" in testData["class"].values and "Iris-versicolor" in testD
     print("Retrying selection of traning and validation data")
     traningData = dataframe.sample(frac=.8)
     testData = dataframe.drop(traningData.index)
+
+theta = np.zeros(len(dataLabels), np.float32)
+xs = traningData[["sepal_length", "sepal_width", "petal_length", "petal_width"]]
+xs = np.array(xs.values)
+xs = np.concatenate(((np.ones((xs.shape[0], 1), dtype=xs.dtype)), xs), axis=1)
+ys = traningData[["class"]]
+ys = ys.apply(lambda col: [0 if val == "Iris-setosa" else 1 for val in col], raw=True)
+ys = np.array(ys.values)
+#print(xs[0])
+#print(theta)
+res = scipy.optimize.minimize(formulas.cost, theta, (xs, ys), options={"disp": True})
+print(res["x"])
