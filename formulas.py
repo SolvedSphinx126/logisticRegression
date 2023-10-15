@@ -3,10 +3,15 @@ import math
 
 # This was harder to figure out than I thought
 def sigmoid(z):
-    if isinstance(z, np.ndarray):
-        return np.vectorize(lambda x: 1 / (1 + (math.e ** -x)))(z)
+    if isinstance(z, list):
+        return list(map(sigmoid, z))
     else:
-        return 1 / (1 + (math.e ** -z))
+        # Try catch is for overflow in exponentiation. If the exponent is too large, we can just return 0
+        # becasue the number would have been 1 / (number so big it overflows) thus returning zero is the best approximation
+        try:
+            return 1.0 / (1.0 + (math.exp(-z)))
+        except:
+            return 0
 
 def hypothesis(x, theta):
     if isinstance(theta, np.ndarray) and isinstance(x, np.ndarray):

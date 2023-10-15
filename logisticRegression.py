@@ -26,8 +26,8 @@ dataframe = pd.DataFrame(formattedDataVals, columns=dataLabels)
 traningData = dataframe.sample(frac=.8)
 testData = dataframe.drop(traningData.index)
 
-# Try again if we got unlucky and didn't have an instance of all three classes in the validation set
-if not ("Iris-setosa" in testData["class"].values and "Iris-versicolor" in testData["class"].values and "Iris-virginica" in testData["class"].values):
+# resample data until the testData has at least one of each class
+while not ("Iris-setosa" in testData["class"].values and "Iris-versicolor" in testData["class"].values and "Iris-virginica" in testData["class"].values):
     print("Retrying selection of traning and validation data")
     traningData = dataframe.sample(frac=.8)
     testData = dataframe.drop(traningData.index)
