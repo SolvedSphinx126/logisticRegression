@@ -40,7 +40,7 @@ def getTrainedThetas(dataframe, yLabel):
     trainingX = np.concatenate(((np.ones((trainingX.shape[0], 1), dtype=trainingX.dtype)), trainingX), axis=1)
 
     trainingY = dataframe[["class"]]
-    trainingY = trainingY.apply(lambda col: [0 if val == yLabel else 1 for val in col], raw=True)
+    trainingY = trainingY.apply(lambda col: [1 if val == yLabel else 0 for val in col], raw=True)
     trainingY = np.array(trainingY.values)
 
     res = scipy.optimize.minimize(formulas.cost, theta, (trainingX, trainingY))
@@ -52,7 +52,7 @@ def getValidationResults(dataframe, yLabel):
     validX = np.array(validX.values)
     validX = np.concatenate(((np.ones((validX.shape[0], 1), dtype=validX.dtype)), validX), axis=1)
     validY = dataframe[["class"]]
-    validY = validY.apply(lambda col: [0 if val == yLabel else 1 for val in col], raw=True)
+    validY = validY.apply(lambda col: [1 if val == yLabel else 0 for val in col], raw=True)
     validY = np.array(validY.values)
 
     for y in enumerate(validY):
@@ -62,6 +62,11 @@ def getValidationResults(dataframe, yLabel):
     tp, fp, tn, fn = formulas.confusionMatrix(resultData, validY)
     return tp, fp, tn, fn
 
+def printPredictionResults(label, trainedThetas, tp, fp, tn, fn):
+    print(f"{label} vs Others:\n   Accuracy          : {formulas.accuracy(tp, fp, tn, fn)}\n   Precision         : {formulas.precision(tp, fp)}")
+    print(f"   Optimal Theta     : {trainedThetas}")
+    print(f"   Confusion matrix values:\n      True Positive  : {tp}\n      True Negative  : {tn}\n      False Positive : {fp}\n      False Negative : {fn}")
+
 
 ##########################################################################################################
 #                                               TEST CASES                                               #
@@ -70,19 +75,19 @@ def getValidationResults(dataframe, yLabel):
 print("\n")
 
 trainedThetas = getTrainedThetas(traningData, "Iris-setosa")
-tp, fp, tn, fn = getValidationResults(traningData, "Iris-setosa")
-print(f"Iris-setosa vs Others:\n   Accuracy: {formulas.accuracy(tp, fp, tn, fn)}, Precision: {formulas.precision(tp, fp)}")
+tp, fp, tn, fn = getValidationResults(testData, "Iris-setosa")
+printPredictionResults("Iris-setosa", trainedThetas, tp, fp, tn, fn)
 
 print("\n")
 
 trainedThetas = getTrainedThetas(traningData, "Iris-versicolor")
-tp, fp, tn, fn = getValidationResults(traningData, "Iris-versicolor")
-print(f"Iris-versicolor vs Others:\n   Accuracy: {formulas.accuracy(tp, fp, tn, fn)}, Precision: {formulas.precision(tp, fp)}")
+tp, fp, tn, fn = getValidationResults(testData, "Iris-versicolor")
+printPredictionResults("Iris-versicolor", trainedThetas, tp, fp, tn, fn)
 
 print("\n")
 
 trainedThetas = getTrainedThetas(traningData, "Iris-virginica")
-tp, fp, tn, fn = getValidationResults(traningData, "Iris-virginica")
-print(f"Iris-virginica vs Others:\n   Accuracy: {formulas.accuracy(tp, fp, tn, fn)}, Precision: {formulas.precision(tp, fp)}")
+tp, fp, tn, fn = getValidationResults(testData, "Iris-virginica")
+printPredictionResults("Iris-virginica", trainedThetas, tp, fp, tn, fn)
 
 print("\n")
