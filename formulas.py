@@ -23,7 +23,14 @@ def cost(theta, data, y):
     for x in enumerate(data):
         #print(hypothesis(x[1], theta))
         curr_cum += -y[x[0]][0] * math.log(hypothesis(x[1], theta), 10) - (1 - y[x[0]][0]) * math.log(1 - hypothesis(x[1], theta), 10)
-    return (1 / m) * curr_cum
+    return ((1 / m) * curr_cum, gradient(theta, data, y))
+
+def gradient(theta, data, y):
+    m = len(data)
+    offsets = []
+    for i in range(0, len(theta)):
+        offsets.append((1 / m) * np.sum([(hypothesis(data[j], theta) - y[j]) * data[j][i] for j in range(1, m)]))
+    return offsets
 
 #Creates the confusion matrix for each prediction.
 def confusionMatrix(predictedData, actualData):

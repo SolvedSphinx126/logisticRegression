@@ -42,7 +42,8 @@ def getTrainedThetas(dataframe, yLabel):
     trainingY = trainingY.apply(lambda col: [1 if val == yLabel else 0 for val in col], raw=True)
     trainingY = np.array(trainingY.values)
 
-    res = scipy.optimize.minimize(formulas.cost, theta, (trainingX, trainingY))
+    res = scipy.optimize.minimize(formulas.cost, theta, (trainingX, trainingY), jac=True)
+
     return res["x"]
 
 def getValidationResults(dataframe, yLabel):
